@@ -126,6 +126,12 @@ svg {
   max-height: 200px;
 }
 
+@media (min-width: 360px) {
+  svg {
+    max-height: 300px;
+  }
+}
+
 [role="status"] {
   position: fixed;
   top: 0;
