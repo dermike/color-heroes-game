@@ -1,9 +1,16 @@
 (function() {
+  let level = 1,
+    lives = 3,
+    status = document.querySelector('[role="status"]');
+
+  const displayLives = () => {
+    return `<button>${lives} &#x2764;&#xFE0F;</button>`;
+  };
+
   const colorClick = e => {
     e.preventDefault();
     let color = e.target.className,
       currentSvg = document.querySelector('.current.svg'),
-      status = document.querySelector('[role="status"]'),
       correct = false;
     if (color && currentSvg) {
       status.className = '';
@@ -21,15 +28,22 @@
       });
       setTimeout(() => {
         if (!document.querySelectorAll('.current.svg .color').length) {
-          status.innerHTML = '<p>Klart!</p><button>Gå till nästa</button>';
+          lives += 1;
+          status.innerHTML = '<p>Rätt!</p><button class="nextlevel">Nästa nivå &#x27A1;&#xFE0F;</button>';
           status.className = 'correct next';
         } else {
           if (correct) {
-            status.innerHTML = '<p>Rätt!</p>';
+            status.innerHTML = '<p>Rätt! Gissa mer.</p>' + displayLives();
             status.className = 'correct';
           } else {
-            status.innerHTML = '<p>Fel!</p>';
-            status.className = 'wrong';
+            lives -= 1;
+            if (lives <= 0) {
+              status.innerHTML = '<p>Game over!</p><button class="playagain">Spela igen &#x1F504;</button>';
+              status.className = 'wrong gameover';
+            } else {
+              status.innerHTML = '<p>Fel!</p>' + displayLives();
+              status.className = 'wrong';
+            }
           }
         }
       }, 100);
@@ -40,4 +54,12 @@
   Array.prototype.forEach.call(colorButtons, button => {
     button.addEventListener('click', colorClick, false);
   });
+
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('playagain')) {
+      document.location.reload();
+    }
+  });
+  status.className = 'status';
+  status.innerHTML = `<p>Nivå ${level}</p>${displayLives()}`;
 })();

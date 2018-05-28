@@ -110,7 +110,7 @@ div.svg {
 
 svg {
   width: 100%;
-  max-height: 300px;
+  max-height: 200px;
 }
 
 [role="status"] {
@@ -132,6 +132,12 @@ svg {
   margin: 0;
 }
 
+[role="status"].status {
+  background-color: lightskyblue;
+  transform: translateY(0);
+  transition: all .5s;
+}
+
 [role="status"].wrong {
   background-color: orange;
   transform: translateY(0);
@@ -144,7 +150,7 @@ svg {
   transition: all .5s;
 }
 
-[role="status"].next ~ .wrapper nav {
+[role="status"].next ~ .wrapper nav, [role="status"].gameover ~ .wrapper nav {
   pointer-events: none;
 }
 
@@ -153,4 +159,5 @@ button {
   border-radius: 5px;
   font-size: 16px;
   background-color: transparent;
+  padding: .5rem;
 }
