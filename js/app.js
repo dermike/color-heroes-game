@@ -11,6 +11,12 @@
   };
 
   const colorClick = e => {
+    if (e.target.style.visibility === 'hidden' || status.classList.contains('next') || status.classList.contains('gameover')) {
+      if (status.classList.contains('next') || status.classList.contains('gameover')) {
+        status.querySelector('button').focus();
+      }
+      return false;
+    }
     e.preventDefault();
     let color = e.target.className,
       currentSvg = document.querySelector('.current.svg'),
