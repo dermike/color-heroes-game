@@ -1,4 +1,4 @@
-(function() {
+(function game() {
   let level = 1,
     lives = 3,
     storage = Boolean('localStorage' in window),
@@ -26,6 +26,7 @@
           return [gamestate[3], gamestate[4], gamestate[5]];
         }
       }
+      return false;
     },
     resetState = () => {
       if (storage) {
@@ -75,7 +76,7 @@
           saveState(currentSvg, currentSvg.className, true);
         } else {
           if (correct) {
-          status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Rätt! Fortsätt gissa!</p></div>${displayLives()}`;
+            status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Rätt! Fortsätt gissa!</p></div>${displayLives()}`;
             status.className = 'correct';
             saveState(currentSvg, currentSvg.className);
           } else {
@@ -85,7 +86,7 @@
               status.className = 'wrong gameover';
               resetState();
             } else {
-              status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Fel! Försök igen!</p></div>${displayLives()}`
+              status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Fel! Försök igen!</p></div>${displayLives()}`;
               status.className = 'wrong';
               saveState(currentSvg, currentSvg.className);
             }
@@ -93,6 +94,7 @@
         }
       }, 100);
     }
+    return true;
   };
 
   const nextSvg = restoredSvg => {
