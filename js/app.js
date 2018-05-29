@@ -25,7 +25,7 @@
       status.className = '';
 
       // hide selected color
-      e.target.style.visibility = 'hidden';
+      e.target.setAttribute('aria-disabled', 'true');
 
       // add color class to fill color in svg
       currentSvg.classList.add(color);
@@ -80,8 +80,10 @@
         newSvg.classList.remove('new');
         newSvg.classList.add('current');
       }, 500);
-      Array.prototype.forEach.call(colorButtons, button => {
-        button.style.visibility = 'visible';
+      Array.prototype.forEach.call(colorButtons, (button, i) => {
+        setTimeout(() => {
+          button.setAttribute('aria-disabled', 'false');
+        }, i * 50);
       });
       status.className = '';
       setTimeout(() => {
