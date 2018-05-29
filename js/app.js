@@ -2,14 +2,16 @@
   let level = 1,
     lives = 3,
     storage = Boolean('localStorage' in window),
-    saveState = currentSvg => {
+    saveState = (currentSvg, guessedColors, completed) => {
       if (storage) {
         localStorage.setItem('gamestate', JSON.stringify(
           [
             level,
             lives,
             svgs,
-            currentSvg.innerHTML
+            guessedColors,
+            currentSvg.innerHTML,
+            completed
           ]
         ));
       }
@@ -21,7 +23,7 @@
           level = gamestate[0];
           lives = gamestate[1];
           svgs = gamestate[2];
-          return gamestate[3];
+          return [gamestate[3], gamestate[4], gamestate[5]];
         }
       }
     },
@@ -70,10 +72,12 @@
           lives += 1;
           status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Rätt! +1 &#x2764;&#xFE0F;</p></div><button class="nextlevel">Nästa nivå &#x27A1;&#xFE0F;</button>`;
           status.className = 'correct next';
+          saveState(currentSvg, currentSvg.className, true);
         } else {
           if (correct) {
           status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Rätt! Fortsätt gissa!</p></div>${displayLives()}`;
             status.className = 'correct';
+            saveState(currentSvg, currentSvg.className);
           } else {
             lives -= 1;
             if (lives <= 0) {
@@ -83,6 +87,7 @@
             } else {
               status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Fel! Försök igen!</p></div>${displayLives()}`
               status.className = 'wrong';
+              saveState(currentSvg, currentSvg.className);
             }
           }
         }
@@ -92,7 +97,7 @@
 
   const nextSvg = restoredSvg => {
     let randomChoice = Math.floor(Math.random() * svgs.length),
-      randomSvg = restoredSvg ? restoredSvg : svgs[randomChoice];
+      randomSvg = restoredSvg ? restoredSvg[1] : svgs[randomChoice];
     if (randomSvg) {
       let newSvg = document.createElement('div'),
         currentSvg = document.querySelector('.svg.current');
@@ -113,16 +118,36 @@
       setTimeout(() => {
         newSvg.classList.remove('new');
         newSvg.classList.add('current');
+        if (restoredSvg && restoredSvg[0]) {
+          newSvg.className = restoredSvg[0];
+        }
       }, 500);
       Array.prototype.forEach.call(colorButtons, (button, i) => {
         setTimeout(() => {
           button.setAttribute('aria-disabled', 'false');
+          if (restoredSvg && restoredSvg[0]) {
+            if (restoredSvg[0].indexOf(button.className) > -1) {
+              button.setAttribute('aria-disabled', 'true');
+            }
+          }
         }, i * 50);
       });
       status.className = '';
       setTimeout(() => {
-        status.className = 'status';
-        status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Börja gissa!</p></div>${displayLives()}`;
+        if (restoredSvg && restoredSvg[2]) {
+          let lastClass = restoredSvg[0].split(' ')[restoredSvg[0].split(' ').length - 1];
+          setTimeout(() => {
+            colorClick({
+              'target': document.querySelector(`nav.colors .${lastClass}`),
+              'preventDefault': () => {
+                lives -= 1;
+              }
+            });
+          }, 600);
+        } else {
+          status.className = 'status';
+          status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Börja gissa!</p></div>${displayLives()}`;
+        }
       }, 100);
     }
   };
