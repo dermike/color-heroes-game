@@ -1,6 +1,36 @@
 (function() {
   let level = 1,
-    lives = 3;
+    lives = 3,
+    storage = Boolean('localStorage' in window),
+    saveState = currentSvg => {
+      if (storage) {
+        localStorage.setItem('gamestate', JSON.stringify(
+          [
+            level,
+            lives,
+            svgs,
+            currentSvg.innerHTML
+          ]
+        ));
+      }
+    },
+    restoreState = () => {
+      if (storage) {
+        let gamestate = JSON.parse(localStorage.getItem('gamestate'));
+        if (gamestate) {
+          level = gamestate[0];
+          lives = gamestate[1];
+          svgs = gamestate[2];
+          return gamestate[3];
+        }
+      }
+    },
+    resetState = () => {
+      if (storage) {
+        localStorage.removeItem('gamestate');
+      }
+    },
+    svgFromState = restoreState();
 
   const status = document.querySelector('[role="status"]');
   const main = document.querySelector('main');
@@ -49,6 +79,7 @@
             if (lives <= 0) {
               status.innerHTML = `<div><h1>Game over!</h1><p>Nivå ${level}</div><button class="playagain">Spela igen &#x1F504;</button>`;
               status.className = 'wrong gameover';
+              resetState();
             } else {
               status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Fel! Försök igen!</p></div>${displayLives()}`
               status.className = 'wrong';
@@ -59,16 +90,18 @@
     }
   };
 
-  const nextSvg = () => {
+  const nextSvg = restoredSvg => {
     let randomChoice = Math.floor(Math.random() * svgs.length),
-      randomSvg = svgs[randomChoice];
+      randomSvg = restoredSvg ? restoredSvg : svgs[randomChoice];
     if (randomSvg) {
       let newSvg = document.createElement('div'),
         currentSvg = document.querySelector('.svg.current');
       newSvg.className = 'svg new';
       newSvg.innerHTML = randomSvg;
       main.appendChild(newSvg);
-      svgs.splice(randomChoice, 1);
+      if (!restoredSvg) {
+        svgs.splice(randomChoice, 1);
+      }
       if (currentSvg) {
         currentSvg.classList.remove('current');
         currentSvg.classList.add('done');
@@ -76,6 +109,7 @@
           main.removeChild(currentSvg);
         }, 600);
       }
+      saveState(newSvg);
       setTimeout(() => {
         newSvg.classList.remove('new');
         newSvg.classList.add('current');
@@ -108,14 +142,16 @@
       } else {
         status.innerHTML = '<div><h1>Du klarade det!</h1><p>Bra jobbat!</p></div><button class="playagain">Spela igen &#x1F504;</button>';
         status.className = 'correct gameover';
+        resetState();
       }
     }
   });
+
   status.className = 'status';
   status.innerHTML = `<p>Nivå ${level}</p>${displayLives()}`;
 
   if (svgs && svgs.length) {
-    nextSvg();
+    nextSvg(svgFromState);
   } else {
     status.innerHTML = '<div><h1>Något gick fel!</h1></div><button class="playagain">Spela igen &#x1F504;</button>';
     status.className = 'wrong gameover';
