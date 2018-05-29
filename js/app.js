@@ -7,7 +7,7 @@
   const colorButtons = document.querySelectorAll('nav a');
 
   const displayLives = () => {
-    return `<button>${lives} &#x2764;&#xFE0F;</button>`;
+    return `<button aria-disabled="true">${lives} &#x2764;&#xFE0F;</button>`;
   };
 
   const colorClick = e => {
@@ -38,19 +38,19 @@
       setTimeout(() => {
         if (!document.querySelectorAll('.current.svg .color').length) {
           lives += 1;
-          status.innerHTML = '<p>Rätt! +1 &#x2764;&#xFE0F;</p><button class="nextlevel">Nästa nivå &#x27A1;&#xFE0F;</button>';
+          status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Rätt! +1 &#x2764;&#xFE0F;</p></div><button class="nextlevel">Nästa nivå &#x27A1;&#xFE0F;</button>`;
           status.className = 'correct next';
         } else {
           if (correct) {
-            status.innerHTML = '<p>Rätt! Gissa mer.</p>' + displayLives();
+          status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Rätt! Fortsätt gissa!</p></div>${displayLives()}`;
             status.className = 'correct';
           } else {
             lives -= 1;
             if (lives <= 0) {
-              status.innerHTML = '<p>Game over!</p><button class="playagain">Spela igen &#x1F504;</button>';
+              status.innerHTML = `<div><h1>Game over!</h1><p>Nivå ${level}</div><button class="playagain">Spela igen &#x1F504;</button>`;
               status.className = 'wrong gameover';
             } else {
-              status.innerHTML = '<p>Fel!</p>' + displayLives();
+              status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Fel! Försök igen!</p></div>${displayLives()}`
               status.className = 'wrong';
             }
           }
@@ -88,7 +88,7 @@
       status.className = '';
       setTimeout(() => {
         status.className = 'status';
-        status.innerHTML = `<p>Nivå ${level}</p>${displayLives()}`;
+        status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Börja gissa!</p></div>${displayLives()}`;
       }, 100);
     }
   };
@@ -106,7 +106,7 @@
         level += 1;
         nextSvg();
       } else {
-        status.innerHTML = '<p>Du klarade det!</p><button class="playagain">Spela igen &#x1F504;</button>';
+        status.innerHTML = '<div><h1>Du klarade det!</h1><p>Bra jobbat!</p></div><button class="playagain">Spela igen &#x1F504;</button>';
         status.className = 'correct gameover';
       }
     }
@@ -117,7 +117,7 @@
   if (svgs && svgs.length) {
     nextSvg();
   } else {
-    status.innerHTML = '<p>Något gick fel!</p><button class="playagain">Spela igen &#x1F504;</button>';
+    status.innerHTML = '<div><h1>Något gick fel!</h1></div><button class="playagain">Spela igen &#x1F504;</button>';
     status.className = 'wrong gameover';
   }
 })();

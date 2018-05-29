@@ -10,6 +10,11 @@ body {
   font-size: 100%;
 }
 
+h1 {
+  font-size: 120%;
+  margin: 0;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -156,7 +161,6 @@ svg {
 }
 
 [role="status"] p {
-  font-weight: bold;
   margin: 0;
 }
 
@@ -189,4 +193,10 @@ button {
   background-color: transparent;
   padding: .5rem;
   min-width: 100px;
+}
+
+button[aria-disabled="true"] {
+  border: none;
+  font-weight: bold;
+  min-width: 0;
 }
