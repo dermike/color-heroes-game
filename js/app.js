@@ -77,22 +77,22 @@
       setTimeout(() => {
         if (!document.querySelectorAll('.current.svg .color').length) {
           lives += 1;
-          status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Rätt! +1 &#x2764;&#xFE0F;</p></div><button class="nextlevel">Nästa nivå &#x27A1;&#xFE0F;</button>`;
+          status.innerHTML = `<div><h1>Level ${level}</h1><p>Correct! +1 &#x2764;&#xFE0F;</p></div><button class="nextlevel">Next level &#x27A1;&#xFE0F;</button>`;
           status.className = 'correct next';
           saveState(currentSvg, currentSvg.className, true);
         } else {
           if (correct) {
-            status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Rätt! Fortsätt gissa!</p></div>${displayLives()}`;
+            status.innerHTML = `<div><h1>Level ${level}</h1><p>Correct! Keep guessing!</p></div>${displayLives()}`;
             status.className = 'correct';
             saveState(currentSvg, currentSvg.className);
           } else {
             lives -= 1;
             if (lives <= 0) {
-              status.innerHTML = `<div><h1>Game over!</h1><p>Nivå ${level}</div><button class="playagain">Spela igen &#x1F504;</button>`;
+              status.innerHTML = `<div><h1>Game over!</h1><p>Level ${level}</div><button class="playagain">Play again &#x1F504;</button>`;
               status.className = 'wrong gameover';
               resetState();
             } else {
-              status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Fel! Försök igen!</p></div>${displayLives()}`;
+              status.innerHTML = `<div><h1>Level ${level}</h1><p>Wrong! Try again!</p></div>${displayLives()}`;
               status.className = 'wrong';
               saveState(currentSvg, currentSvg.className);
             }
@@ -155,7 +155,7 @@
           }, 600);
         } else {
           status.className = 'status';
-          status.innerHTML = `<div><h1>Nivå ${level}</h1><p>Börja gissa!</p></div>${displayLives()}`;
+          status.innerHTML = `<div><h1>Level ${level}</h1><p>Start guessing!</p></div>${displayLives()}`;
         }
       }, 100);
     }
@@ -174,20 +174,17 @@
         level += 1;
         nextSvg();
       } else {
-        status.innerHTML = '<div><h1>Du klarade det!</h1><p>Bra jobbat!</p></div><button class="playagain">Spela igen &#x1F504;</button>';
+        status.innerHTML = '<div><h1>You made it!</h1><p>Good job!</p></div><button class="playagain">Play again &#x1F504;</button>';
         status.className = 'correct gameover';
         resetState();
       }
     }
   });
 
-  status.className = 'status';
-  status.innerHTML = `<p>Nivå ${level}</p>${displayLives()}`;
-
   if (svgs && svgs.length) {
     nextSvg(restoredState);
   } else {
-    status.innerHTML = '<div><h1>Något gick fel!</h1></div><button class="playagain">Spela igen &#x1F504;</button>';
+    status.innerHTML = '<div><h1>Something went wrong!</h1></div><button class="playagain">Play again &#x1F504;</button>';
     status.className = 'wrong gameover';
   }
 })();

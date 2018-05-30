@@ -1,6 +1,6 @@
 {
-    "name": "Gissa färgen!",
-    "short_name": "GissaFärgen!",
+    "name": "Color Hero!",
+    "short_name": "ColorHero",
     "icons": [
         {
             "src": "android-chrome-192x192.png",
