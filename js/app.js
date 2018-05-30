@@ -50,7 +50,7 @@
   };
 
   const colorClick = e => {
-    if (e.target.style.visibility === 'hidden' || status.classList.contains('next') || status.classList.contains('gameover')) {
+    if (e.target.getAttribute('aria-hidden') === 'true' || status.classList.contains('next') || status.classList.contains('gameover')) {
       if (status.classList.contains('next') || status.classList.contains('gameover')) {
         status.querySelector('button').focus();
       }
