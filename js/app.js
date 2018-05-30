@@ -1,18 +1,19 @@
 (function game() {
   let level = 1,
     lives = 3,
+    completedSvgs = [],
     storage = Boolean('localStorage' in window),
     saveState = (currentSvg, guessedColors, completed) => {
       if (storage) {
         localStorage.setItem('gamestate', JSON.stringify(
-          [
-            level,
-            lives,
-            svgs,
-            guessedColors,
-            currentSvg.innerHTML,
-            completed
-          ]
+          {
+            'level': level,
+            'lives': lives,
+            'guessedColors': guessedColors,
+            'completedSvgs': completedSvgs,
+            'currentSvg': currentSvg.innerHTML,
+            'completed': completed
+          }
         ));
       }
     },
@@ -20,10 +21,15 @@
       if (storage) {
         let gamestate = JSON.parse(localStorage.getItem('gamestate'));
         if (gamestate) {
-          level = gamestate[0];
-          lives = gamestate[1];
-          svgs = gamestate[2];
-          return [gamestate[3], gamestate[4], gamestate[5]];
+          level = gamestate.level;
+          lives = gamestate.lives;
+          completedSvgs = gamestate.completedSvgs;
+          if (gamestate.completedSvgs) {
+            gamestate.completedSvgs.forEach(val => {
+              svgs.splice(val, 1);
+            });
+          }
+          return gamestate;
         }
       }
       return false;
@@ -99,7 +105,7 @@
 
   const nextSvg = restoredSvg => {
     let randomChoice = Math.floor(Math.random() * svgs.length),
-      randomSvg = restoredSvg ? restoredSvg[1] : svgs[randomChoice];
+      randomSvg = restoredSvg ? restoredSvg.currentSvg : svgs[randomChoice];
     if (randomSvg) {
       let newSvg = document.createElement('div'),
         currentSvg = document.querySelector('.svg.current');
@@ -107,6 +113,7 @@
       newSvg.innerHTML = randomSvg;
       main.appendChild(newSvg);
       if (!restoredSvg) {
+        completedSvgs.push(randomChoice);
         svgs.splice(randomChoice, 1);
       }
       if (currentSvg) {
@@ -120,15 +127,15 @@
       setTimeout(() => {
         newSvg.classList.remove('new');
         newSvg.classList.add('current');
-        if (restoredSvg && restoredSvg[0]) {
-          newSvg.className = restoredSvg[0];
+        if (restoredSvg && restoredSvg.guessedColors) {
+          newSvg.className = restoredSvg.guessedColors;
         }
       }, 500);
       Array.prototype.forEach.call(colorButtons, (button, i) => {
         setTimeout(() => {
           button.setAttribute('aria-disabled', 'false');
-          if (restoredSvg && restoredSvg[0]) {
-            if (restoredSvg[0].indexOf(button.className) > -1) {
+          if (restoredSvg && restoredSvg.guessedColors) {
+            if (restoredSvg.guessedColors.indexOf(button.className) > -1) {
               button.setAttribute('aria-disabled', 'true');
             }
           }
@@ -136,8 +143,8 @@
       });
       status.className = '';
       setTimeout(() => {
-        if (restoredSvg && restoredSvg[2]) {
-          let lastClass = restoredSvg[0].split(' ')[restoredSvg[0].split(' ').length - 1];
+        if (restoredSvg && restoredSvg.completed) {
+          let lastClass = restoredSvg.guessedColors.split(' ')[restoredSvg.guessedColors.split(' ').length - 1];
           setTimeout(() => {
             colorClick({
               'target': document.querySelector(`nav.colors .${lastClass}`),

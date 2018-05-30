@@ -188,6 +188,7 @@ svg {
 
 button {
   border: 1px solid #000;
+  color: #000;
   border-radius: 5px;
   font-size: 16px;
   background-color: transparent;
