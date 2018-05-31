@@ -3,6 +3,24 @@
     lives = 3,
     completedLevels = [],
     storage = Boolean('localStorage' in window),
+    context,
+    sounds = {
+      'correct1': {
+        'src': 'sounds/correct1.m4a'
+      },
+      'correct2': {
+        'src': 'sounds/correct2.m4a'
+      },
+      'wrong': {
+        'src': 'sounds/wrong.m4a'
+      },
+      'newlevel': {
+        'src': 'sounds/newlevel.m4a'
+      },
+      'gameover': {
+        'src': 'sounds/gameover.m4a'
+      }
+    },
     saveState = (currentSvg, guessedColors, completed) => {
       if (storage) {
         localStorage.setItem('gamestate', JSON.stringify(
@@ -38,6 +56,26 @@
       if (storage) {
         localStorage.removeItem('gamestate');
       }
+    },
+    playSound = buffer => {
+      let source = context.createBufferSource();
+      source.buffer = buffer;
+      source.connect(context.destination);
+      source.start(0);
+    },
+    loadSoundObj = obj => {
+      let request = new XMLHttpRequest();
+      request.open('GET', obj.src, true);
+      request.responseType = 'arraybuffer';
+
+      request.onload = function onload() {
+        context.decodeAudioData(request.response, function reqload(buffer) {
+          obj.buffer = buffer;
+        }, function reqerr(err) {
+          throw new Error(err);
+        });
+      };
+      request.send();
     },
     restoredState = restoreState();
 
@@ -79,21 +117,28 @@
           lives += 1;
           status.innerHTML = `<div><h1>Level ${level}</h1><p>Correct! +1 &#x2764;&#xFE0F;</p></div><button class="nextlevel">Next level &#x27A1;&#xFE0F;</button>`;
           status.className = 'correct next';
+          playSound(sounds.correct2.buffer);
           saveState(currentSvg, currentSvg.className, true);
         } else {
           if (correct) {
             status.innerHTML = `<div><h1>Level ${level}</h1><p>Correct! Keep guessing!</p></div>${displayLives()}`;
             status.className = 'correct';
+            playSound(sounds.correct1.buffer);
             saveState(currentSvg, currentSvg.className);
           } else {
             lives -= 1;
             if (lives <= 0) {
               status.innerHTML = `<div><h1>Game over!</h1><p>Level ${level}</div><button class="playagain">Play again &#x1F504;</button>`;
               status.className = 'wrong gameover';
+              playSound(sounds.wrong.buffer);
+              setTimeout(() => {
+                playSound(sounds.gameover.buffer);
+              }, 100);
               resetState();
             } else {
               status.innerHTML = `<div><h1>Level ${level}</h1><p>Wrong! Try again!</p></div>${displayLives()}`;
               status.className = 'wrong';
+              playSound(sounds.wrong.buffer);
               saveState(currentSvg, currentSvg.className);
             }
           }
@@ -151,15 +196,23 @@
               'preventDefault': () => {
                 lives -= 1;
               }
-            });
+            }, true);
           }, 600);
         } else {
           status.className = 'status';
           status.innerHTML = `<div><h1>Level ${level}</h1><p>Start guessing!</p></div>${displayLives()}`;
+          playSound(sounds.newlevel.buffer);
         }
       }, 100);
     }
   };
+
+  try {
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    context = new AudioContext();
+  } catch (e) {
+    throw new Error('Sound loading failed');
+  }
 
   Array.prototype.forEach.call(colorButtons, button => {
     button.addEventListener('click', colorClick, false);
@@ -180,6 +233,12 @@
       }
     }
   });
+
+  loadSoundObj(sounds.correct1);
+  loadSoundObj(sounds.correct2);
+  loadSoundObj(sounds.wrong);
+  loadSoundObj(sounds.newlevel);
+  loadSoundObj(sounds.gameover);
 
   if (svgs && svgs.length) {
     nextSvg(restoredState);
