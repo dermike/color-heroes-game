@@ -123,13 +123,13 @@
           main.removeChild(currentSvg);
         }, 600);
       }
-      saveState(newSvg);
       setTimeout(() => {
         newSvg.classList.remove('new');
         newSvg.classList.add('current');
         if (previousState && previousState.guessedColors) {
           newSvg.className = previousState.guessedColors;
         }
+        saveState(newSvg, newSvg.className);
       }, 500);
       Array.prototype.forEach.call(colorButtons, (button, i) => {
         setTimeout(() => {
