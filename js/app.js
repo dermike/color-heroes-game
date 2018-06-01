@@ -21,7 +21,7 @@
         'src': 'sounds/gameover.m4a'
       }
     },
-    saveState = (currentSvg, guessedColors, completed) => {
+    saveState = (guessedColors, completed) => {
       if (storage) {
         localStorage.setItem('gamestate', JSON.stringify(
           {
@@ -29,7 +29,6 @@
             'lives': lives,
             'guessedColors': guessedColors,
             'completedLevels': completedLevels,
-            'currentSvg': currentSvg.innerHTML,
             'completed': completed
           }
         ));
@@ -43,8 +42,10 @@
           lives = gamestate.lives;
           completedLevels = gamestate.completedLevels;
           if (gamestate.completedLevels) {
-            gamestate.completedLevels.forEach(val => {
-              svgs.splice(val, 1);
+            gamestate.completedLevels.forEach((val, i) => {
+              if (i !== gamestate.completedLevels.length - 1) {
+                svgs.splice(val, 1);
+              }
             });
           }
           return gamestate;
@@ -87,6 +88,15 @@
     return `<button aria-disabled="true">${lives} &#x2764;&#xFE0F;</button>`;
   };
 
+  const removeColor = (color, svg) => {
+    let colorFound = false;
+    Array.prototype.forEach.call(svg.querySelectorAll('.color.' + color), item => {
+      item.classList.remove('color');
+      colorFound = true;
+    });
+    return colorFound;
+  };
+
   const colorClick = e => {
     if (e.target.getAttribute('aria-hidden') === 'true' || status.classList.contains('next') || status.classList.contains('gameover')) {
       if (status.classList.contains('next') || status.classList.contains('gameover')) {
@@ -108,23 +118,20 @@
       currentSvg.classList.add(color);
 
       // remove .color class for selected color. No color = nothing left to guess
-      Array.prototype.forEach.call(document.querySelectorAll('.current.svg .color.' + color), item => {
-        item.classList.remove('color');
-        correct = true;
-      });
+      correct = removeColor(color, currentSvg);
       setTimeout(() => {
         if (!document.querySelectorAll('.current.svg .color').length) {
           lives += 1;
           status.innerHTML = `<div><h1>Level ${level}</h1><p>Correct! +1 &#x2764;&#xFE0F;</p></div><button class="nextlevel">Next level &#x27A1;&#xFE0F;</button>`;
           status.className = 'correct next';
           playSound(sounds.correct2.buffer);
-          saveState(currentSvg, currentSvg.className, true);
+          saveState(currentSvg.className, true);
         } else {
           if (correct) {
             status.innerHTML = `<div><h1>Level ${level}</h1><p>Correct! Keep guessing!</p></div>${displayLives()}`;
             status.className = 'correct';
             playSound(sounds.correct1.buffer);
-            saveState(currentSvg, currentSvg.className);
+            saveState(currentSvg.className);
           } else {
             lives -= 1;
             if (lives <= 0) {
@@ -139,7 +146,7 @@
               status.innerHTML = `<div><h1>Level ${level}</h1><p>Wrong! Try again!</p></div>${displayLives()}`;
               status.className = 'wrong';
               playSound(sounds.wrong.buffer);
-              saveState(currentSvg, currentSvg.className);
+              saveState(currentSvg.className);
             }
           }
         }
@@ -150,7 +157,8 @@
 
   const nextSvg = previousState => {
     let randomChoice = Math.floor(Math.random() * svgs.length),
-      randomSvg = previousState ? previousState.currentSvg : svgs[randomChoice];
+      svgIndex = previousState ? previousState.completedLevels[previousState.completedLevels.length - 1] : randomChoice,
+      randomSvg = svgs[svgIndex];
     if (randomSvg) {
       let newSvg = document.createElement('div'),
         currentSvg = document.querySelector('.svg.current');
@@ -158,9 +166,9 @@
       newSvg.innerHTML = randomSvg;
       main.appendChild(newSvg);
       if (!previousState) {
-        completedLevels.push(randomChoice);
-        svgs.splice(randomChoice, 1);
+        completedLevels.push(svgIndex);
       }
+      svgs.splice(svgIndex, 1);
       if (currentSvg) {
         currentSvg.classList.remove('current');
         currentSvg.classList.add('done');
@@ -174,7 +182,7 @@
         if (previousState && previousState.guessedColors) {
           newSvg.className = previousState.guessedColors;
         }
-        saveState(newSvg, newSvg.className);
+        saveState(newSvg.className);
       }, 500);
       Array.prototype.forEach.call(colorButtons, (button, i) => {
         setTimeout(() => {
@@ -182,6 +190,7 @@
           if (previousState && previousState.guessedColors) {
             if (previousState.guessedColors.indexOf(button.className) > -1) {
               button.setAttribute('aria-disabled', 'true');
+              removeColor(button.className, newSvg);
             }
           }
         }, i * 50);
@@ -211,7 +220,7 @@
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     context = new AudioContext();
   } catch (e) {
-    throw new Error('Sound loading failed');
+    throw new Error('No Web Audio support');
   }
 
   Array.prototype.forEach.call(colorButtons, button => {
