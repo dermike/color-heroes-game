@@ -94,11 +94,11 @@ a.green {
 }
 
 a.yellow {
-  background-color: yellow;
+  background-color: gold;
 }
 
 .yellow .yellow {
-  fill: yellow;
+  fill: gold;
 }
 
 a.blue {
