@@ -88,7 +88,7 @@
     return `<button aria-disabled="true">${lives} &#x2764;&#xFE0F;</button>`;
   };
 
-  const removeColor = (color, svg) => {
+  const guessColor = (color, svg) => {
     let colorFound = false;
     Array.prototype.forEach.call(svg.querySelectorAll('.color.' + color), item => {
       item.classList.remove('color');
@@ -118,7 +118,7 @@
       currentSvg.classList.add(color);
 
       // remove .color class for selected color. No color = nothing left to guess
-      correct = removeColor(color, currentSvg);
+      correct = guessColor(color, currentSvg);
       setTimeout(() => {
         if (!document.querySelectorAll('.current.svg .color').length) {
           lives += 1;
@@ -190,7 +190,7 @@
           if (previousState && previousState.guessedColors) {
             if (previousState.guessedColors.indexOf(button.className) > -1) {
               button.setAttribute('aria-disabled', 'true');
-              removeColor(button.className, newSvg);
+              guessColor(button.className, newSvg);
             }
           }
         }, i * 50);
