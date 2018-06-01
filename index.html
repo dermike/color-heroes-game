@@ -30,20 +30,24 @@
     <div class="wrapper">
       <main role="main">
         <noscript>Requires JavaScript</noscript>
+        <div class="svg current intro">
+          <p>Get your favorite superheroes and villains to fight alongside you by guessing the correct colors of their suits and gadgets.</p>
+          <p><button class="startgame">&#x26A1; Start game &#x26A1;</button></p>
+        </div>
       </main>
       <nav class="colors">
-        <a role="button" href="#" class="red" aria-label="Red"></a>
-        <a role="button" href="#" class="green" aria-label="Green"></a>
-        <a role="button" href="#" class="yellow" aria-label="Yellow"></a>
-        <a role="button" href="#" class="blue" aria-label="Blue"></a>
-        <a role="button" href="#" class="black" aria-label="Black"></a>
-        <a role="button" href="#" class="purple" aria-label="Purple"></a>
-        <a role="button" href="#" class="brown" aria-label="Brown"></a>
-        <a role="button" href="#" class="pink" aria-label="Pink"></a>
+        <a role="button" href="#" class="red" aria-disabled="true" aria-label="Red"></a>
+        <a role="button" href="#" class="green" aria-disabled="true" aria-label="Green"></a>
+        <a role="button" href="#" class="yellow" aria-disabled="true" aria-label="Yellow"></a>
+        <a role="button" href="#" class="blue" aria-disabled="true" aria-label="Blue"></a>
+        <a role="button" href="#" class="black" aria-disabled="true" aria-label="Black"></a>
+        <a role="button" href="#" class="purple" aria-disabled="true" aria-label="Purple"></a>
+        <a role="button" href="#" class="brown" aria-disabled="true" aria-label="Brown"></a>
+        <a role="button" href="#" class="pink" aria-disabled="true" aria-label="Pink"></a>
       </nav>
     </div>
     <script src="js/svgs.min.js"></script>
-    <script src="js/app.min.js"></script>
+    <script src="js/app.js"></script>
     <script>
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js', { scope: './' }).then(() => {

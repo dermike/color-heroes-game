@@ -102,7 +102,7 @@
     return colorFound;
   };
 
-  const colorClick = e => {
+  const colorClick = (e, noSound) => {
     if (e.target.getAttribute('aria-hidden') === 'true' || status.classList.contains('next') || status.classList.contains('gameover')) {
       if (status.classList.contains('next') || status.classList.contains('gameover')) {
         status.querySelector('button').focus();
@@ -127,9 +127,9 @@
       setTimeout(() => {
         if (!document.querySelectorAll('.current.svg .color').length) {
           lives += 1;
-          status.innerHTML = `<div><h1>Level ${level}</h1><p>Correct! +1 &#x2764;&#xFE0F;</p></div><button class="nextlevel">Next level &#x27A1;&#xFE0F;</button>`;
+          status.innerHTML = `<div><h1>Level ${level}</h1><p>Correct! +1 &#x2764;&#xFE0F;</p></div><button class="nextlevel">Next level &#x1F525;</button>`;
           status.className = 'correct next';
-          playSound(sounds.correct2.buffer);
+          playSound(!noSound ? sounds.correct2.buffer : null);
           saveState(currentSvg.className, true);
         } else {
           if (correct) {
@@ -140,7 +140,7 @@
           } else {
             lives -= 1;
             if (lives <= 0) {
-              status.innerHTML = `<div><h1>Game over!</h1><p>Level ${level}</div><button class="playagain">Play again &#x1F504;</button>`;
+              status.innerHTML = `<div><h1>Game over!</h1><p>Level ${level}</div><button class="playagain">Play again &#x1F4AB;</button>`;
               status.className = 'wrong gameover';
               playSound(sounds.wrong.buffer);
               setTimeout(() => {
@@ -210,7 +210,7 @@
               'preventDefault': () => {
                 lives -= 1;
               }
-            }, true);
+            }, true, true);
           }, 600);
         } else {
           status.className = 'status';
@@ -233,6 +233,14 @@
   });
 
   document.addEventListener('click', e => {
+    if (e.target.classList.contains('startgame')) {
+      if (svgs && svgs.length) {
+        nextSvg();
+      } else {
+        status.innerHTML = '<div><h1>Something went wrong!</h1></div><button class="playagain">Play again &#x1F504;</button>';
+        status.className = 'wrong gameover';
+      }
+    }
     if (e.target.classList.contains('playagain')) {
       document.location.reload();
     }
@@ -254,11 +262,13 @@
   loadSoundObj(sounds.newlevel);
   loadSoundObj(sounds.gameover);
 
-  if (svgs && svgs.length) {
-    restoredState = restoreState();
+  restoredState = restoreState();
+  if (restoredState) {
     nextSvg(restoredState);
   } else {
-    status.innerHTML = '<div><h1>Something went wrong!</h1></div><button class="playagain">Play again &#x1F504;</button>';
-    status.className = 'wrong gameover';
+    setTimeout(function begin() {
+      status.innerHTML = '<div><h1>Color Heroes &#x1F4A5;</div>' + displayLives();
+      status.className = 'status';
+    }, 100);
   }
 })();
