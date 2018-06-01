@@ -21,68 +21,73 @@
         'src': 'sounds/gameover.m4a'
       }
     },
-    saveState = (guessedColors, completed) => {
-      if (storage) {
-        localStorage.setItem('gamestate', JSON.stringify(
-          {
-            'level': level,
-            'lives': lives,
-            'guessedColors': guessedColors,
-            'completedLevels': completedLevels,
-            'completed': completed
-          }
-        ));
-      }
-    },
-    restoreState = () => {
-      if (storage) {
-        let gamestate = JSON.parse(localStorage.getItem('gamestate'));
-        if (gamestate) {
-          level = gamestate.level;
-          lives = gamestate.lives;
-          completedLevels = gamestate.completedLevels;
-          if (gamestate.completedLevels) {
-            gamestate.completedLevels.forEach((val, i) => {
-              if (i !== gamestate.completedLevels.length - 1) {
-                svgs.splice(val, 1);
-              }
-            });
-          }
-          return gamestate;
-        }
-      }
-      return false;
-    },
-    resetState = () => {
-      if (storage) {
-        localStorage.removeItem('gamestate');
-      }
-    },
-    playSound = buffer => {
-      let source = context.createBufferSource();
-      source.buffer = buffer;
-      source.connect(context.destination);
-      source.start(0);
-    },
-    loadSoundObj = obj => {
-      let request = new XMLHttpRequest();
-      request.open('GET', obj.src, true);
-      request.responseType = 'arraybuffer';
-
-      request.onload = function onload() {
-        context.decodeAudioData(request.response, function reqload(buffer) {
-          obj.buffer = buffer;
-        }, function reqerr(err) {
-          throw new Error(err);
-        });
-      };
-      request.send();
-    },
-    restoredState = restoreState();
+    restoredState;
 
   const status = document.querySelector('[role="status"]');
   const main = document.querySelector('main');
   const colorButtons = document.querySelectorAll('nav a');
+
+  const saveState = (guessedColors, completed) => {
+    if (storage) {
+      localStorage.setItem('gamestate', JSON.stringify(
+        {
+          'level': level,
+          'lives': lives,
+          'guessedColors': guessedColors,
+          'completedLevels': completedLevels,
+          'completed': completed
+        }
+      ));
+    }
+  };
+
+  const restoreState = () => {
+    if (storage) {
+      let gamestate = JSON.parse(localStorage.getItem('gamestate'));
+      if (gamestate) {
+        level = gamestate.level;
+        lives = gamestate.lives;
+        completedLevels = gamestate.completedLevels;
+        if (gamestate.completedLevels) {
+          gamestate.completedLevels.forEach((val, i) => {
+            if (i !== gamestate.completedLevels.length - 1) {
+              svgs.splice(val, 1);
+            }
+          });
+        }
+        return gamestate;
+      }
+    }
+    return false;
+  };
+
+  const resetState = () => {
+    if (storage) {
+      localStorage.removeItem('gamestate');
+    }
+  };
+
+  const playSound = buffer => {
+    let source = context.createBufferSource();
+    source.buffer = buffer;
+    source.connect(context.destination);
+    source.start(0);
+  };
+
+  const loadSoundObj = obj => {
+    let request = new XMLHttpRequest();
+    request.open('GET', obj.src, true);
+    request.responseType = 'arraybuffer';
+
+    request.onload = function onload() {
+      context.decodeAudioData(request.response, function reqload(buffer) {
+        obj.buffer = buffer;
+      }, function reqerr(err) {
+        throw new Error(err);
+      });
+    };
+    request.send();
+  };
 
   const displayLives = () => {
     return `<button aria-disabled="true">${lives} &#x2764;&#xFE0F;</button>`;
@@ -250,6 +255,7 @@
   loadSoundObj(sounds.gameover);
 
   if (svgs && svgs.length) {
+    restoredState = restoreState();
     nextSvg(restoredState);
   } else {
     status.innerHTML = '<div><h1>Something went wrong!</h1></div><button class="playagain">Play again &#x1F504;</button>';
