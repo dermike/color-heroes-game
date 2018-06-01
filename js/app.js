@@ -237,7 +237,7 @@
       if (svgs && svgs.length) {
         nextSvg();
       } else {
-        status.innerHTML = '<div><h1>Something went wrong!</h1></div><button class="playagain">Play again &#x1F504;</button>';
+        status.innerHTML = '<div><h1>Something went wrong!</h1></div><button class="playagain">Play again &#x1F4AB;</button>';
         status.className = 'wrong gameover';
       }
     }
@@ -249,7 +249,7 @@
         level += 1;
         nextSvg();
       } else {
-        status.innerHTML = '<div><h1>You made it!</h1><p>Good job!</p></div><button class="playagain">Play again &#x1F504;</button>';
+        status.innerHTML = '<div><h1>You made it!</h1><p>Good job!</p></div><button class="playagain">Play again &#x1F4AB;</button>';
         status.className = 'correct gameover';
         resetState();
       }
