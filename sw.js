@@ -3,16 +3,16 @@ let CACHE = 'cache-and-update';
 function precache() {
   return caches.open(CACHE).then(function(cache) {
     return cache.addAll([
-      './',
-      './index.html',
-      './css/style.css',
-      './js/svgs.min.js',
-      './js/app.min.js',
-      './sounds/correct1.m4a',
-      './sounds/correct2.m4a',
-      './sounds/wrong.m4a',
-      './sounds/gameover.m4a',
-      './sounds/newlevel.m4a'
+      '/',
+      '/index.html',
+      '/css/style.css',
+      '/js/svgs.min.js',
+      '/js/app.min.js',
+      '/sounds/correct1.m4a',
+      '/sounds/correct2.m4a',
+      '/sounds/wrong.m4a',
+      '/sounds/gameover.m4a',
+      '/sounds/newlevel.m4a'
     ]);
   });
 }
