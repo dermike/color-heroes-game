@@ -264,6 +264,7 @@
 
   restoredState = restoreState();
   if (restoredState) {
+    main.innerHTML = '';
     nextSvg(restoredState);
   } else {
     setTimeout(function begin() {
