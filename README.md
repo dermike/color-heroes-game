@@ -4,6 +4,6 @@ Quick and dirty color guessing game. In a weak moment I promised my kids I would
 
 ![](https://raw.githubusercontent.com/dermike/guess-the-color-game/master/screenshot/screenshot.jpg)
 
-Superhero logos from [Speckyboy](https://speckyboy.com/freebie-the-flat-superheroes-villains-icon-set-100-icons-png-svg/)
+Superhero logos from [Speckyboy](https://speckyboy.com/freebie-the-flat-superheroes-villains-icon-set-100-icons-png-svg/) (Design by Freepik.com)
 
 Sounds by [David McKee (ViRiX)](https://soundcloud.com/virix)
