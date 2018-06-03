@@ -267,7 +267,7 @@
     main.innerHTML = '';
     nextSvg(restoredState);
   } else {
-    setTimeout(function begin() {
+    setTimeout(() => {
       status.innerHTML = '<div><h1>Color Heroes &#x1F4A5;</div>' + displayLives();
       status.className = 'status';
     }, 100);
