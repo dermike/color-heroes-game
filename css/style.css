@@ -42,6 +42,8 @@ main {
   line-height: 1.5;
   font-size: 120%;
   width: 90% !important;
+  animation-name: fadeInDown;
+  animation-duration: 1s;
 }
 
 .intro p {
@@ -227,4 +229,16 @@ button[aria-disabled="true"] {
   min-width: 0;
   background-color: transparent;
   color: #000;
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-80px) scale(.75);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
