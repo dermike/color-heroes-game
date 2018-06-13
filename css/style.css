@@ -11,6 +11,7 @@ body {
   background-color: #CDDCDC;
   background-color: #CDDCDC;
   background-image: linear-gradient(to top, white 0%, #dfe9f3 100%);
+  overflow: hidden;
 }
 
 h1 {
@@ -34,8 +35,7 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex: 1 0 0;
-  overflow: hidden;
+  flex: 1 0 0%;
 }
 
 .intro {
