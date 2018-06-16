@@ -102,6 +102,14 @@
     return colorFound;
   };
 
+  const setStatus = (markup, classes) => {
+    status.className = '';
+    setTimeout(() => {
+      status.innerHTML = markup;
+      status.className = classes ? classes : 'status';
+    }, 100);
+  };
+
   const colorClick = (e, noSound) => {
     if (e.target.getAttribute('aria-hidden') === 'true' || status.classList.contains('next') || status.classList.contains('gameover')) {
       if (status.classList.contains('next') || status.classList.contains('gameover')) {
@@ -114,8 +122,6 @@
       currentSvg = document.querySelector('.current.svg'),
       correct = false;
     if (color && currentSvg) {
-      status.className = '';
-
       // hide selected color
       e.target.setAttribute('aria-disabled', 'true');
 
@@ -124,38 +130,32 @@
 
       // remove .color class for selected color. No color = nothing left to guess
       correct = guessColor(color, currentSvg);
-      setTimeout(() => {
-        if (!document.querySelectorAll('.current.svg .color').length) {
-          lives += 1;
-          status.innerHTML = `<div><h1>Level ${level}</h1><p>Correct! +1 &#x2764;&#xFE0F;</p></div><button class="nextlevel">Next level &#x1F525;</button>`;
-          status.className = 'correct next';
-          playSound(!noSound ? sounds.correct2.buffer : null);
-          saveState(currentSvg.className, true);
+      if (!currentSvg.querySelectorAll('.current.svg .color').length) {
+        lives += 1;
+        setStatus(`<div><h1>Level ${level}</h1><p>Correct! +1 &#x2764;&#xFE0F;</p></div><button class="nextlevel">Next level &#x1F525;</button>`, 'correct next');
+        playSound(!noSound ? sounds.correct2.buffer : null);
+        saveState(currentSvg.className, true);
+      } else {
+        if (correct) {
+          setStatus(`<div><h1>Level ${level}</h1><p>Correct! Keep guessing!</p></div>${displayLives()}`, 'correct');
+          playSound(sounds.correct1.buffer);
+          saveState(currentSvg.className);
         } else {
-          if (correct) {
-            status.innerHTML = `<div><h1>Level ${level}</h1><p>Correct! Keep guessing!</p></div>${displayLives()}`;
-            status.className = 'correct';
-            playSound(sounds.correct1.buffer);
-            saveState(currentSvg.className);
+          lives -= 1;
+          if (lives <= 0) {
+            setStatus(`<div><h1>Game over!</h1><p>Level ${level}</div><button class="playagain">Play again &#x1F4AB;</button>`, 'wrong gameover');
+            playSound(sounds.wrong.buffer);
+            setTimeout(() => {
+              playSound(sounds.gameover.buffer);
+            }, 100);
+            resetState();
           } else {
-            lives -= 1;
-            if (lives <= 0) {
-              status.innerHTML = `<div><h1>Game over!</h1><p>Level ${level}</div><button class="playagain">Play again &#x1F4AB;</button>`;
-              status.className = 'wrong gameover';
-              playSound(sounds.wrong.buffer);
-              setTimeout(() => {
-                playSound(sounds.gameover.buffer);
-              }, 100);
-              resetState();
-            } else {
-              status.innerHTML = `<div><h1>Level ${level}</h1><p>Wrong! Try again!</p></div>${displayLives()}`;
-              status.className = 'wrong';
-              playSound(sounds.wrong.buffer);
-              saveState(currentSvg.className);
-            }
+            setStatus(`<div><h1>Level ${level}</h1><p>Wrong! Try again!</p></div>${displayLives()}`, 'wrong');
+            playSound(sounds.wrong.buffer);
+            saveState(currentSvg.className);
           }
         }
-      }, 100);
+      }
     }
     return true;
   };
@@ -200,24 +200,20 @@
           }
         }, i * 50);
       });
-      status.className = '';
-      setTimeout(() => {
-        if (previousState && previousState.completed) {
-          let lastClass = previousState.guessedColors.split(' ')[previousState.guessedColors.split(' ').length - 1];
-          setTimeout(() => {
-            colorClick({
-              'target': document.querySelector(`nav.colors .${lastClass}`),
-              'preventDefault': () => {
-                lives -= 1;
-              }
-            }, true, true);
-          }, 600);
-        } else {
-          status.className = 'status';
-          status.innerHTML = `<div><h1>Level ${level}</h1><p>Start guessing!</p></div>${displayLives()}`;
-          playSound(sounds.newlevel.buffer);
-        }
-      }, 100);
+      if (previousState && previousState.completed) {
+        let lastClass = previousState.guessedColors.split(' ')[previousState.guessedColors.split(' ').length - 1];
+        setTimeout(() => {
+          colorClick({
+            'target': document.querySelector(`nav.colors .${lastClass}`),
+            'preventDefault': () => {
+              lives -= 1;
+            }
+          }, true, true);
+        }, 600);
+      } else {
+        setStatus(`<div><h1>Level ${level}</h1><p>Start guessing!</p></div>${displayLives()}`);
+        playSound(sounds.newlevel.buffer);
+      }
     }
   };
 
@@ -237,8 +233,7 @@
       if (svgs && svgs.length) {
         nextSvg();
       } else {
-        status.innerHTML = '<div><h1>Something went wrong!</h1></div><button class="playagain">Play again &#x1F4AB;</button>';
-        status.className = 'wrong gameover';
+        setStatus('<div><h1>Something went wrong!</h1></div><button class="playagain">Play again &#x1F4AB;</button>', 'wrong gameover');
       }
     }
     if (e.target.classList.contains('playagain')) {
@@ -249,8 +244,7 @@
         level += 1;
         nextSvg();
       } else {
-        status.innerHTML = '<div><h1>You made it!</h1><p>Good job!</p></div><button class="playagain">Play again &#x1F4AB;</button>';
-        status.className = 'correct gameover';
+        setStatus('<div><h1>You made it!</h1><p>Good job!</p></div><button class="playagain">Play again &#x1F4AB;</button>', 'correct gameover');
         resetState();
       }
     }
@@ -267,9 +261,6 @@
     main.innerHTML = '';
     nextSvg(restoredState);
   } else {
-    setTimeout(() => {
-      status.innerHTML = '<div><h1>Color Heroes &#x1F4A5;</div>' + displayLives();
-      status.className = 'status';
-    }, 100);
+    setStatus('<div><h1>Color Heroes &#x1F4A5;</div>' + displayLives());
   }
 })();
