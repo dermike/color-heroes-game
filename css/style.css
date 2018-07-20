@@ -65,7 +65,7 @@ nav.colors {
 nav.colors a {
   flex: 1 0 25%;
   height: 80px;
-  max-height: 10vh;
+  max-height: 12vh;
   transition: all .25s;
   transform: scale(1);
   visibility: visible;
