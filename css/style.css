@@ -233,3 +233,16 @@ button[aria-disabled="true"] {
     transform: translateY(0) scale(1);
   }
 }
+
+@media (max-width: 300px) {
+  body {
+    font-size: 65%;
+  }
+  [role="status"] {
+    padding: .75rem;
+  }
+  .startgame, button {
+    min-width: 0;
+    padding: .5rem;
+  }
+}
