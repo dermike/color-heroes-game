@@ -2,6 +2,7 @@
   let level = 1,
     lives = 3,
     completedLevels = [],
+    showNumbers = false,
     storage = Boolean('localStorage' in window),
     context,
     sounds = {
@@ -35,7 +36,8 @@
           'lives': lives,
           'guessedColors': guessedColors,
           'completedLevels': completedLevels,
-          'completed': completed
+          'completed': completed,
+          'showNumbers': showNumbers
         }
       ));
     }
@@ -48,6 +50,7 @@
         level = gamestate.level;
         lives = gamestate.lives;
         completedLevels = gamestate.completedLevels;
+        showNumbers = gamestate.showNumbers;
         if (gamestate.completedLevels) {
           gamestate.completedLevels.forEach((val, i) => {
             if (i !== gamestate.completedLevels.length - 1) {
@@ -190,6 +193,9 @@
         saveState(newSvg.className);
       }, 500);
       Array.prototype.forEach.call(colorButtons, (button, i) => {
+        if (showNumbers && !button.textContent) {
+          button.textContent = i + 1;
+        }
         setTimeout(() => {
           button.setAttribute('aria-disabled', 'false');
           if (previousState && previousState.guessedColors) {
@@ -246,6 +252,28 @@
       } else {
         setStatus('<div><h1>You made it!</h1><p>Good job!</p></div><button class="playagain">Play again &#x1F4AB;</button>', 'correct gameover');
         resetState();
+      }
+    }
+  });
+
+  // Keyboard support for accessibility and feature phones with KaiOS
+  // Enter/ArrowRight/ArrowDown for buttons and numbers 1-8 to select color.
+  // If game is started with enter, numbers are visually added to colors.
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      let currentButton = document.querySelector('button:not([aria-disabled])');
+      if (currentButton) {
+        if (currentButton.classList.contains('startgame')) {
+          showNumbers = true;
+        }
+        currentButton.blur();
+        currentButton.click();
+      }
+    }
+    if (!isNaN(e.key) && e.key > 0 && e.key < 9) {
+      let colorPressed = colorButtons[e.key - 1];
+      if (colorPressed && colorPressed.getAttribute('aria-disabled') !== 'true') {
+        colorPressed.click();
       }
     }
   });

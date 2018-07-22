@@ -73,6 +73,11 @@ nav.colors a {
   transition: all .25s;
   transform: scale(1);
   visibility: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: #fff;
 }
 
 nav.colors a[aria-disabled="true"] {
@@ -84,7 +89,7 @@ svg .color, .white {
   fill: white;
 }
 
-a.red {
+nav a.red {
   background-color: red;
 }
 
@@ -92,7 +97,7 @@ a.red {
   fill: red;
 }
 
-a.green {
+nav a.green {
   background-color: green;
 }
 
@@ -100,15 +105,16 @@ a.green {
   fill: green;
 }
 
-a.yellow {
+nav a.yellow {
   background-color: gold;
+  color: #000;
 }
 
 .yellow .yellow {
   fill: gold;
 }
 
-a.blue {
+nav a.blue {
   background-color: blue;
 }
 
@@ -116,7 +122,7 @@ a.blue {
   fill: blue;
 }
 
-a.black {
+nav a.black {
   background-color: black;
 }
 
@@ -124,7 +130,7 @@ a.black {
   fill: black;
 }
 
-a.purple {
+nav a.purple {
   background-color: purple;
 }
 
@@ -132,7 +138,7 @@ a.purple {
   fill: purple;
 }
 
-a.brown {
+nav a.brown {
   background-color: brown;
 }
 
@@ -140,8 +146,9 @@ a.brown {
   fill: brown;
 }
 
-a.pink {
+nav a.pink {
   background-color: pink;
+  color: #000;
 }
 
 .pink .pink {
@@ -222,7 +229,7 @@ button[aria-disabled="true"] {
   border: none;
   font-weight: bold;
   min-width: 0;
-  background-color: transparent;
+  background: none;
   color: #000;
 }
 
@@ -247,7 +254,7 @@ button[aria-disabled="true"] {
   }
   .startgame, button {
     min-width: 0;
-    padding: .5rem;
+    padding: .3rem;
   }
 }
 
