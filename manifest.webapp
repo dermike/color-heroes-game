@@ -8,7 +8,7 @@
     "56": "/Colorheroes_56.png",
     "112": "/Colorheroes_112.png"
   },
-  "orientation": "portrait",
+  "orientation": ["portrait"],
   "developer": {
     "name": "Mikael Jergefelt",
     "url": "https://librarian.codes"
