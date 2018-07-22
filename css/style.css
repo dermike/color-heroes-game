@@ -71,7 +71,6 @@ nav.colors a {
   height: 80px;
   max-height: 12vh;
   transition: all .25s;
-  transform: scale(1);
   visibility: visible;
   display: flex;
   justify-content: center;
