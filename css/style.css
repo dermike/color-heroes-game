@@ -247,7 +247,7 @@ button[aria-disabled="true"] {
 
 @media (max-width: 300px) {
   body {
-    font-size: 65%;
+    font-size: 75%;
   }
   [role="status"] {
     padding: .75rem;
