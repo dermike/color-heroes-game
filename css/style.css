@@ -78,6 +78,8 @@ nav.colors a {
   align-items: center;
   text-decoration: none;
   color: #fff;
+  font-size: 120%;
+  font-weight: bold;
 }
 
 nav.colors a[aria-disabled="true"] {
@@ -220,7 +222,7 @@ button {
   color: #fff;
   background-color: black;
   border-radius: 5px;
-  font-size: 100%;
+  font-size: 120%;
   padding: .5rem;
   min-width: 100px;
 }
