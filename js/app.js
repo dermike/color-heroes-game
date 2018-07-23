@@ -22,7 +22,8 @@
         'src': 'sounds/gameover.m4a'
       }
     },
-    restoredState;
+    restoredState,
+    keyPressed = false;
 
   const status = document.querySelector('[role="status"]');
   const main = document.querySelector('main');
@@ -257,9 +258,13 @@
   });
 
   // Keyboard support for accessibility and feature phones with KaiOS
-  // Enter/ArrowRight/ArrowDown for buttons and numbers 1-8 to select color.
+  // Enter for buttons and numbers 1-8 to select color.
   // If game is started with enter, numbers are visually added to colors.
   document.addEventListener('keydown', e => {
+    if (keyPressed) {
+      return false;
+    }
+    keyPressed = true;
     if (e.key === 'Enter') {
       let currentButton = document.querySelector('button:not([aria-disabled])');
       if (currentButton) {
@@ -276,6 +281,10 @@
         colorPressed.click();
       }
     }
+    return true;
+  });
+  document.addEventListener('keyup', () => {
+    keyPressed = false;
   });
 
   loadSoundObj(sounds.correct1);
