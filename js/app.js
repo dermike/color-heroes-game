@@ -260,7 +260,7 @@
   // Enter/ArrowRight/ArrowDown for buttons and numbers 1-8 to select color.
   // If game is started with enter, numbers are visually added to colors.
   document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+    if (e.key === 'Enter') {
       let currentButton = document.querySelector('button:not([aria-disabled])');
       if (currentButton) {
         if (currentButton.classList.contains('startgame')) {
