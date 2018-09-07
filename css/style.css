@@ -36,18 +36,17 @@ h1 {
 }
 
 main {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   flex: 1 0 0%;
 }
 
 .intro {
   line-height: 1.5;
   font-size: 120%;
-  width: 90% !important;
   animation-name: fadeInDown;
   animation-duration: 1s;
+  flex-direction: column;
+  padding: 0 5% !important;
 }
 
 .intro p {
@@ -157,16 +156,23 @@ nav a.pink {
 }
 
 div.svg {
-  width: 75%;
+  position: absolute;
+  width: 100%;
   transition: transform .5s;
+  will-change: transform;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 12%;
 }
 
 div.svg.new {
-  transform: translateX(150%);
+  transform: translateX(102%);
 }
 
 div.svg.done {
-  transform: translateX(-150%);
+  transform: translateX(-102%);
 }
 
 div.svg.current {
@@ -188,6 +194,7 @@ svg {
   color: #000;
   z-index: 2;
   max-height: 20vh;
+  will-change: transform;
 }
 
 [role="status"] p {
@@ -222,7 +229,7 @@ button {
   background-color: black;
   border-radius: 5px;
   font-size: 120%;
-  padding: .5rem;
+  padding: .4rem;
   min-width: 100px;
 }
 
