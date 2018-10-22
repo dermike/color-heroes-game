@@ -1,4 +1,4 @@
-const PRECACHE = 'colorheroes-v1';
+const PRECACHE = 'colorheroes-v1.1';
 const RUNTIME = 'runtime';
 
 // A list of local resources we always want to be cached.
