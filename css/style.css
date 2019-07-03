@@ -290,3 +290,34 @@ button[aria-disabled="true"] {
     font-size: 180%;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #d9e1e8;
+    background-color: #111;
+    background-image: linear-gradient(to top, #222 0%, #444 100%);
+  }
+  svg .color, .white {
+    fill: #999;
+  }
+  button {
+    color: #000;
+    border-color: #d9e1e8;
+    background-color: #d9e1e8;
+  }
+  [role="status"], button[aria-disabled="true"], nav.colors a {
+    color: #d9e1e8;
+  }
+  [role="status"].status {
+    background-color: #083751;
+  }
+  [role="status"].wrong {
+    background-color: saddlebrown;
+  }
+  [role="status"].correct {
+    background-color: seagreen;
+  }
+  nav a.pink, nav a.yellow {
+    color: #000;
+  }
+}
