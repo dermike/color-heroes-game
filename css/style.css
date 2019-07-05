@@ -295,7 +295,7 @@ button[aria-disabled="true"] {
   body {
     color: #d9e1e8;
     background-color: #111;
-    background-image: linear-gradient(to top, #222 0%, #444 100%);
+    background-image: linear-gradient(to top, #444 0%, #333 100%);
   }
   svg .color, .white {
     fill: #999;
