@@ -25,6 +25,12 @@ h1 {
   margin: 0;
 }
 
+.emoji {
+  font-weight: 400;
+  font-family: apple color emoji,segoe ui emoji,noto color emoji,android emoji,emojisymbols,emojione mozilla,twemoji mozilla,segoe ui symbol;
+  pointer-events: none;
+}
+
 .wrapper {
   display: flex;
   flex-direction: column;
