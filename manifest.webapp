@@ -3,7 +3,7 @@
   "name": "Color Heroes",
   "short_name": "ColorHeroes",
   "description": "Superhero color guessing game",
-  "launch_path": "/",
+  "launch_path": "/color-heroes-game",
   "icons": {
     "56": "/Colorheroes_56.png",
     "112": "/Colorheroes_112.png"
@@ -11,13 +11,13 @@
   "orientation": ["portrait"],
   "developer": {
     "name": "Mikael Jergefelt",
-    "url": "https://librarian.codes"
+    "url": "https://librarian.dev"
   },
   "locales": {
     "en": {
       "description": "Superhero color guessing game",
       "developer": {
-        "url": "https://librarian.codes"
+        "url": "https://librarian.dev"
       }
     }
   },
